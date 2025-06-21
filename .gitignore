@@ -1,0 +1,11 @@
+# sdl源代码
+SDL3-3.2.16/
+
+# 文件备份
+*.bak
+
+# aide 构建输出
+build/
+jniLibs/
+obj/
+libs/
