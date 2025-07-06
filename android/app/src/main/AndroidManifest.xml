@@ -3,6 +3,14 @@
     android:installLocation="auto"
     package="net.zhiji.snake.t">
 
+	<!-- Android 11+ 全盘访问（仅限文件管理器类应用） -->
+	<uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+
+    <uses-sdk
+        android:minSdkVersion="21"
+        android:targetSdkVersion="35" />
+
+
     <!-- OpenGL ES 2.0 -->
     <uses-feature android:glEsVersion="0x00020000" />
 
