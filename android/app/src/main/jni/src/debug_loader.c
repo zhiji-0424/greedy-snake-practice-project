@@ -5,6 +5,8 @@
 #include <dlfcn.h>
 #include <time.h>
 #include <sys/stat.h>
+#include <errno.h>
+#include <string.h>
 
 // 将内容输出到文件
 static char log_file_name[1500];
@@ -19,24 +21,40 @@ static void log_cat(const char *msg) {
     // SDL_ShowSimpleMessageBox(0, "简单消息框", msg, 0);
 }
 
+// 执行命令调用，对system的封装
+static void exec_cmd(const char* cmd)
+{
+    int status = system(cmd);
+    if (status == -1) {
+        log_cat("system() 调用失败：");
+        log_cat(strerror(errno));
+    }
+}
+
 // 保存日志(&符号，后台运行)
 static void show_logcat(void)
 {
     char cmd[1000];
     sprintf(cmd, "logcat >> %s &", log_file_name);
+    log_cat("执行命令调用：logcat，细节如下：");
     log_cat(cmd);
     // log_cat("before system show_logcat");
-    system(cmd);
+    // system(cmd);
     // log_cat("show_logcat");
+    exec_cmd(cmd);
+    log_cat("完成命令调用");
 }
 
 // 清除日志缓存
 static void clear_logcat(void)
 {
     char cmd[1000];
-    sprintf(cmd, "logcat -c");
-    system(cmd);
+    sprintf(cmd, "logcat -c &");
+    // system(cmd);
     // log_cat("clear_logcat");
+    log_cat("执行命令调用：logcat -c ＆");
+    exec_cmd(cmd);
+    log_cat("完成命令调用");
 }
 
 #define OK  1
@@ -86,7 +104,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     // 打印时间
     time_t now = time(NULL);
     char time_str[1000];
-    strftime(time_str, sizeof(time_str), "    [%Y-%m-%d %H:%M:%S]", localtime(&now));
+    strftime(time_str, sizeof(time_str), "===============[%Y-%m-%d %H:%M:%S]==================", localtime(&now));
     log_cat(time_str);
 
     // 显示上一次的logcat
