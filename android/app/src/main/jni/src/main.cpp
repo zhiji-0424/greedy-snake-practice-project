@@ -9,6 +9,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 
+
 /* We will use this renderer to draw into this window every frame. */
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
@@ -16,7 +17,9 @@ static SDL_Renderer *renderer = NULL;
 /* This function runs once at startup. */
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 {
+
     SDL_SetAppMetadata("Example Renderer Lines", "1.0", "com.example.renderer-lines");
+
 
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         SDL_Log("Couldn't initialize SDL: %s", SDL_GetError());
@@ -28,7 +31,9 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
         return SDL_APP_FAILURE;
     }
     
-    SDL_ShowSimpleMessageBox(0, 0, "hello", 0);
+    SDL_Log("测试: %s", SDL_GetError());
+    
+    // SDL_ShowSimpleMessageBox(0, 0, "hello", 0);
 
     return SDL_APP_CONTINUE;  /* carry on with the program! */
 }
@@ -53,7 +58,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
        and to the right. This isn't how geometry works, but this is pretty
        standard in 2D graphics. */
     static const SDL_FPoint line_points[] = {
-        { 100, 354 }, { 220, 230 }, { 140, 230 }, { 320, 100 }, { 500, 230 },
+        { 100, 974 }, { 220, 230 }, { 140, 230 }, { 320, 100 }, { 500, 230 },
         { 420, 230 }, { 540, 354 }, { 400, 354 }, { 100, 354 }
     };
 
