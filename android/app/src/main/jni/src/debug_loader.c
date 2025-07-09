@@ -8,6 +8,20 @@
 #include <errno.h>
 #include <string.h>
 
+
+// 防卡死(2秒)
+int is_crashed = 1;
+int monitor_thread_func(void*xxxx) {
+    int a = SDL_GetTicks();
+    while (1) {
+        int delta = (SDL_GetTicks() - a) / 1000;
+        if (delta >= 2 && is_crashed == 1) {
+            exit(9);
+        }
+    }
+}
+
+
 // 将内容输出到文件
 static char log_file_name[1500];
 static void log_cat(const char *msg) {
@@ -89,7 +103,7 @@ static const char* DocumentsPath;   // Android 文档统一路径
 
 // 共享库
 static void *lib = 0;
-static SDL_AppResult ret;
+static SDL_AppResult ret = SDL_APP_FAILURE;
 
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 {
@@ -107,9 +121,20 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     strftime(time_str, sizeof(time_str), "===============[%Y-%m-%d %H:%M:%S]==================", localtime(&now));
     log_cat(time_str);
 
+    // 防卡死
+    log_cat("创建防卡死线程。");
+    SDL_Thread *tfks = SDL_CreateThread(monitor_thread_func, "防卡死", 0);
+    if (!tfks) {
+        log_cat("防卡死线程创建失败。");
+        return SDL_APP_FAILURE;
+    }
+
     // 显示上一次的logcat
     clear_logcat();
     show_logcat();
+    
+    // 防卡死
+    is_crashed = 0;
 
     // 在Java端复制
     // 复制库文件
