@@ -23,6 +23,7 @@ endif
 
 # 导入库
 LOCAL_SHARED_LIBRARIES := SDL3
+LOCAL_STATIC_LIBRARIES := dearimgui stb
 
 # 构建动态库
 include $(BUILD_SHARED_LIBRARY)
