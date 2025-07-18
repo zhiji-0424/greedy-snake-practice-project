@@ -5,9 +5,11 @@ include $(CLEAR_VARS)
 # 要构建的模块名
 LOCAL_MODULE := main
 
+SRC_DIR := ../../../../../../code/
+
 # 源代码
 LOCAL_SRC_FILES := \
-    main.cpp
+    $(SRC_DIR)/main.cpp
 
 # 调试开关(0:no,  1:yes)，可以命令行设置
 use_debug_loader ?= 0
