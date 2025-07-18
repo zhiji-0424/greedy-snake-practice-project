@@ -4,6 +4,7 @@
 
 贪吃蛇, 游戏
 
+因为某些原因重开了仓库，原地址是：[贪吃蛇](https://gitee.com/zhiji-0424/eating-snake.git)
 
 ## 第三方库
 
