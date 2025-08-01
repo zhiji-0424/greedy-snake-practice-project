@@ -4,7 +4,7 @@
 
 贪吃蛇, 游戏
 
-因为某些原因重开了仓库，原地址是：[贪吃蛇](https://gitee.com/zhiji-0424/eating-snake.git)
+因为某些原因重开了仓库，原地址是：[贪吃蛇](https://gitee.com/zhiji-0424/eating-snake.git)，有较详细的历史记录。
 
 ## 第三方库
 
@@ -14,6 +14,7 @@
 ## 许可证
 
 `eating-snake` 由 @zhiji_0424 编写, 许可证是[Mit许可证](https://mit-license.org/)。
+**请按照许可证要求使用此仓库。**
 
 
 ## 玩法
