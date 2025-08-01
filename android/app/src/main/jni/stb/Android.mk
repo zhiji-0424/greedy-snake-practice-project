@@ -11,7 +11,7 @@ STB_DIR := ../../../../../../stb-date-05.26
 
 # 指定源文件
 LOCAL_SRC_FILES := \
-    stb_image.cpp
+    $(STB_DIR)/../code/stb_image.cpp
 
 # 如果有头文件，可以指定包含路径（可选）
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/$(STB_DIR)
