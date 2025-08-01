@@ -31,6 +31,9 @@ add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 # ================================================================================
 
 # SDL3
+# 强制 SDL3 构建静态库
+set(SDL_STATIC ON CACHE BOOL "Build static libraries" FORCE)
+set(SDL_SHARED OFF CACHE BOOL "Build shared libraries" FORCE)
 add_subdirectory(SDL3-3.2.16 EXCLUDE_FROM_ALL)
 
 # dear imgui
