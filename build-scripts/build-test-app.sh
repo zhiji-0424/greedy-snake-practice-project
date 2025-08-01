@@ -14,15 +14,18 @@ fi
 # 定义目标文件夹的完整路径
 a_folder="$folder_path/jni"
 hidden_a_folder="$folder_path/.jni"
+hided=0
 
 # 检查并执行重命名操作
 if [ -d "$hidden_a_folder" ]; then
     # 如果.a存在，重命名为a
     mv "$hidden_a_folder" "$a_folder"
     echo "\033[34m操作：将 '.jni' 重命名为 'jni'\033[0m"
+    hided=1
 else
-    echo "\033[31m操作：'.jni' 文件夹不存在，没有执行任何操作\033[0m"
-    exit 1
+    # echo "\033[31m操作：'.jni' 文件夹不存在，没有执行任何操作\033[0m"
+    hided=0
+    # exit 1
 fi
 
 # 调用编译工具
@@ -36,6 +39,12 @@ echo "\033[34mndk-build 调用结束，不使用loader\033[0m"
 cp libs/arm64-v8a/libmain.so /sdcard/Documents/
 rm -r libs/
 echo "\033[34m转移到 Documents 完成\033[0m"
+
+if [ "$hided" -eq 1 ]; then
+    echo 1
+else
+    exit 0
+fi
 
 # 检查并执行重命名操作
 if [ -d "$a_folder" ]; then
