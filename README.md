@@ -27,17 +27,10 @@
 
 ## 构建
 
-1. 找到
-   ```cmake
-   # 添加cmake搜索路径
-   set(CMAKE_PREFIX_PATH "D:/ProgramWares/Library")
-   ```
-   修改到你的安装路径，或者直接删除这行代码，使用默认路径。
-
-2. 将 `Snake-res` 下的 `assets` 复制到可执行程序同一目录。
+1. 直接解压项目根目录下的3个压缩包。
 
 3. ```shell
-    cmake Snake-Desktop/ -Bbuild --DCMAKE_BUILD_TYPE=Release
+    cmake . -Bbuild --DCMAKE_BUILD_TYPE=Release
     cmake --build build
     ```
 4. 运行 `build/bin/eating-snake` 即可开始游戏。如果被缩放了，请尝试`右键程序-属性-兼容性-更改高DPI设置-替代高DPI缩放行为`
