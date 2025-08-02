@@ -10,7 +10,11 @@ set(SNAKE_SOURCE_FILES
     code/main.cpp
 )
 
-add_executable(eating-snake ${SNAKE_SOURCE_FILES})
+if (CMAKE_BUILD_TYPE STREQUAL "Release")
+    add_executable(eating-snake WIN32 ${SNAKE_SOURCE_FILES})
+else()
+    add_executable(eating-snake ${SNAKE_SOURCE_FILES})
+endif()
 
 # 链接库
 target_link_libraries(eating-snake
