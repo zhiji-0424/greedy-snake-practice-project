@@ -13,7 +13,5 @@
 
 ---
 
-适配 Android 5~13
-(android:exported="true"
-android:debuggable)
+
 
