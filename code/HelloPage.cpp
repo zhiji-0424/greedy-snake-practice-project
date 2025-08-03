@@ -1,14 +1,20 @@
 #include "HelloPage.hpp"
-#include "SDL3/SDL.h"
+#include <SDL3/SDL.h>
+#include <imgui.h>
+#include <imgui_impl_sdl3.h>
+#include <imgui_impl_sdlrenderer3.h>
+#include <stb_image.h>
 
 HelloPage::HelloPage()
 {
     page_name = "HelloPage";
 }
+
 HelloPage::~HelloPage()
 {
     
 }
+
 void HelloPage::init()
 {
 
@@ -35,11 +41,59 @@ void HelloPage::handle(const SDL_Event& event)
         sprintf(editing_text, "%s", event.text.text);
     }
 }
+
+bool image_loaded = false;
+int w, h, n;
+SDL_Texture *texture = 0;
+float scale = 1.0f;
+char buf[100000];
+bool need_draw = true;
+
 void HelloPage::update()
 {
     
 }
+
 void HelloPage::draw()
 {
+    ImGuiIO& io = ImGui::GetIO();
+
+    const double now = ((double)SDL_GetTicks()) / 1000.0;  /* convert from milliseconds to seconds. */
+    /* choose the color for the frame we will draw. The sine wave trick makes it fade between colors smoothly. */
+    const float red = (float) (0.5 + 0.5 * SDL_sin(now));
+    const float green = (float) (0.5 + 0.5 * SDL_sin(now + SDL_PI_D * 2 / 3));
+    const float blue = (float) (0.5 + 0.5 * SDL_sin(now + SDL_PI_D * 4 / 3));
+    SDL_SetRenderDrawColorFloat(GetAppState()->renderer, red, green, blue, SDL_ALPHA_OPAQUE_FLOAT);  /* new color, full alpha. */
+    SDL_RenderClear(GetAppState()->renderer);
+
+    // if (ImGui::Button("close keyboard")) {
+        
+    // }
+    ImGui::Begin("hhh");
+    ImGui::Text("frame rate: %.1f", io.Framerate);
+    ImGui::Text("SDL_TextInputActive(window): %s", SDL_TextInputActive(GetAppState()->window)?"yes":"no");
+    ImGui::SliderFloat("缩放蒽蒽蒽蒽蒽蒽蒽蒽图片", &scale, 0, 5);
+    // ImGui::InputTextMultiline("str", buf, 100000, ImVec2(800,0));
+    // ImGui::Text("%s", editing_text);
+    ImGui::End();
+
+    if (!image_loaded) {
+        unsigned char *data = stbi_load("/storage/emulated/0/Download/20250625135715.png", &w, &h, &n, 0);
+        if (data) {
+            SDL_Surface *surface = SDL_CreateSurfaceFrom(w, h, SDL_PIXELFORMAT_RGB24, data, n*w);
+            if (surface) {
+                texture = SDL_CreateTextureFromSurface(GetAppState()->renderer, surface);
+                SDL_DestroySurface(surface);
+            } else {
+                SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "surface 创建错误：%s", SDL_GetError());
+            }
+            stbi_image_free(data);
+        } else {
+            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "stb加载错误：%s", stbi_failure_reason());
+        }
+        image_loaded = true;
+    }
+    ImGui::Text("宽：%d，高：%d，通道：%d", w, h, n);
+    ImGui::Image((ImTextureID)(intptr_t)texture, ImVec2(w*scale, h*scale));
     GetAppState()->page_manager->request_draw();
 }
