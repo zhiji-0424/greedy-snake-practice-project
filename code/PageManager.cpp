@@ -56,7 +56,7 @@ void PageManager::request_page(Page* new_page_)
         delete new_page;
     }
     new_page = new_page_;
-    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "request_page() %s --> %s", "PageManager", current_page->page_name.c_str(), new_page_->page_name.c_str());
+    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "%s: request_page() %s --> %s", "PageManager", current_page->page_name.c_str(), new_page_->page_name.c_str());
 }
 
 void PageManager::request_draw()
