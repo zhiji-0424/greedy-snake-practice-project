@@ -47,6 +47,9 @@ void PageManager::first_page(Page* first_page)
 void PageManager::request_exit()
 {
     exit_requested = true;
+    if (current_page)
+        delete current_page;
+    current_page = nullptr;
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "PageManager:%s", "request_exit()");
 }
 
@@ -93,9 +96,6 @@ void PageManager::do_step()
 
     // 请求退出
     if (exit_requested) {
-        if (current_page)
-            delete current_page;
-        current_page = nullptr;
         SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "%s: 退出请求已接受", "PageManager");
         // 后续交给主程序
     }
