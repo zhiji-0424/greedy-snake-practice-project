@@ -5,7 +5,6 @@
 #include <imgui_impl_sdl3.h>
 #include <imgui_impl_sdlrenderer3.h>
 #include <stb_image.h>
-#include <string>
 
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
@@ -43,53 +42,6 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 
 
     return SDL_APP_CONTINUE;
-}
-
-std::string eventToString(const SDL_Event& event) {
-    switch (event.type) {
-        case SDL_EVENT_QUIT:
-            return "SDL_EVENT_QUIT";
-
-        case SDL_EVENT_KEY_DOWN:
-            // SDL3 新版：直接使用 event.key.key 表示键位码
-            return "SDL_EVENT_KEY_DOWN [key=" + std::to_string(event.key.key) + "]";
-
-        case SDL_EVENT_KEY_UP:
-            return "SDL_EVENT_KEY_UP [key=" + std::to_string(event.key.key) + "]";
-
-        case SDL_EVENT_MOUSE_MOTION:
-            return "SDL_EVENT_MOUSE_MOTION [x=" + std::to_string(event.motion.x) + 
-                   ", y=" + std::to_string(event.motion.y) + "]";
-
-        case SDL_EVENT_MOUSE_BUTTON_DOWN:
-            return "SDL_EVENT_MOUSE_BUTTON_DOWN [button=" + std::to_string(event.button.button) + "]";
-
-        case SDL_EVENT_MOUSE_BUTTON_UP:
-            return "SDL_EVENT_MOUSE_BUTTON_UP [button=" + std::to_string(event.button.button) + "]";
-
-        /*case SDL_EVENT_WINDOW_EVENT:
-            switch (event.window.event) {
-                case SDL_WINDOWEVENT_RESIZED:
-                    return "SDL_WINDOWEVENT_RESIZED [w=" + std::to_string(event.window.data1) + 
-                           ", h=" + std::to_string(event.window.data2) + "]";
-                case SDL_WINDOWEVENT_FOCUS_GAINED:
-                    return "SDL_WINDOWEVENT_FOCUS_GAINED";
-                case SDL_WINDOWEVENT_FOCUS_LOST:
-                    return "SDL_WINDOWEVENT_FOCUS_LOST";
-                default:
-                    return "SDL_WINDOWEVENT [type=" + std::to_string(event.window.event) + "]";
-            }*/
-
-        case SDL_EVENT_TEXT_INPUT:
-            return "SDL_EVENT_TEXT_INPUT [text=" + std::string(event.text.text) + "]";
-
-        default:
-            return "SDL_EVENT [type=" + std::to_string(event.type) + "]";
-    }
-}
-
-void printEvent(const SDL_Event& event) {
-    SDL_Log("%s", eventToString(event).c_str());
 }
 
 #include <stdlib.h>

@@ -8,6 +8,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # 代码文件
 set(SNAKE_SOURCE_FILES
     code/main.cpp
+    code/AppState.cpp
+    code/Food.cpp
+    code/Page.cpp
+    code/PageManager.cpp
+    code/ScoreManager.cpp
+    code/Snake.cpp
+    code/Wall.cpp
 )
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
