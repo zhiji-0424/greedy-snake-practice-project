@@ -5,20 +5,41 @@
 #include <imgui_impl_sdl3.h>
 #include <imgui_impl_sdlrenderer3.h>
 #include <stb_image.h>
-
-static SDL_Window *window = NULL;
-static SDL_Renderer *renderer = NULL;
+#include "AppState.hpp"
 
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 {
-    SDL_SetAppMetadata("Example Renderer Clear", "1.0", "com.example.renderer-clear");
+    SDL_SetAppMetadata("贪吃蛇", "1.0", "net.zhiji.snake");
+
+    SDL_SetLogPriorities(SDL_LOG_PRIORITY_VERBOSE);
+
+    new AppState();
+    GetAppState()->system_name = SDL_GetPlatform();
+    if (GetAppState()->system_name == "Android") {
+        GetAppState()->data_path = SDL_GetPrefPath(nullptr, nullptr) + std::string("/data/");
+        GetAppState()->res_path  = ""; // 待测试
+        if (!SDL_CreateDirectory(GetAppState()->data_path.c_str())) {
+            SDL_Log("Couldn't create directory: %s", SDL_GetError());
+        }
+    } else {
+        GetAppState()->data_path = "./data/";
+        GetAppState()->res_path  = "./res/";
+        if (!SDL_CreateDirectory(GetAppState()->data_path.c_str())) {
+            SDL_Log("Couldn't create directory: %s", SDL_GetError());
+        }
+        if (!SDL_CreateDirectory(GetAppState()->res_path.c_str())) {
+            SDL_Log("Couldn't create directory: %s", SDL_GetError());
+        }
+    }
 
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         SDL_Log("Couldn't initialize SDL: %s", SDL_GetError());
         return SDL_APP_FAILURE;
     }
-    if (!SDL_CreateWindowAndRenderer("examples/renderer/clear", 640, 480, SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY, &window, &renderer)) {
-        SDL_Log("Couldn't create window/renderer: %s", SDL_GetError());
+    if (!SDL_CreateWindowAndRenderer("贪吃蛇", 640, 480,
+                                    SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY,
+                                    &GetAppState()->window, &GetAppState()->renderer)) {
+        SDL_Log("Couldn't create window orrenderer: %s", SDL_GetError());
         return SDL_APP_FAILURE;
     }
     
@@ -34,8 +55,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     style.ScaleAllSizes(main_scale);        // Bake a fixed style scale. (until we have a solution for dynamic style scaling, changing this requires resetting Style + calling this again)
     style.FontScaleDpi = main_scale;        // Set initial font scale. (using io.ConfigDpiScaleFonts=true makes this unnecessary. We leave both here for documentation purpose)
     // Setup Platform/Renderer backends
-    ImGui_ImplSDL3_InitForSDLRenderer(window, renderer);
-    ImGui_ImplSDLRenderer3_Init(renderer);
+    ImGui_ImplSDL3_InitForSDLRenderer(GetAppState()->window, GetAppState()->renderer);
+    ImGui_ImplSDLRenderer3_Init(GetAppState()->renderer);
     // Fonts
     // io.Fonts->AddFontFromFileTTF("/storage/emulated/0/Documents/Misans-Normal.ttf");
     io.Fonts->AddFontDefault();
@@ -101,15 +122,15 @@ SDL_AppResult SDL_AppIterate(void *appstate)
         const float red = (float) (0.5 + 0.5 * SDL_sin(now));
         const float green = (float) (0.5 + 0.5 * SDL_sin(now + SDL_PI_D * 2 / 3));
         const float blue = (float) (0.5 + 0.5 * SDL_sin(now + SDL_PI_D * 4 / 3));
-        SDL_SetRenderDrawColorFloat(renderer, red, green, blue, SDL_ALPHA_OPAQUE_FLOAT);  /* new color, full alpha. */
-        SDL_RenderClear(renderer);
+        SDL_SetRenderDrawColorFloat(GetAppState()->renderer, red, green, blue, SDL_ALPHA_OPAQUE_FLOAT);  /* new color, full alpha. */
+        SDL_RenderClear(GetAppState()->renderer);
     
         // if (ImGui::Button("close keyboard")) {
             
         // }
         ImGui::Begin("hhh");
         ImGui::Text("frame rate: %.1f", io.Framerate);
-        ImGui::Text("SDL_TextInputActive(window): %s", SDL_TextInputActive(window)?"yes":"no");
+        ImGui::Text("SDL_TextInputActive(window): %s", SDL_TextInputActive(GetAppState()->window)?"yes":"no");
         ImGui::Text("目标帧率: %d", target_fps);
         ImGui::Text("frame time: %lu", frame_time );
         ImGui::SliderInt("target fps", &target_fps, 30, 360);
@@ -123,7 +144,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
             if (data) {
                 SDL_Surface *surface = SDL_CreateSurfaceFrom(w, h, SDL_PIXELFORMAT_RGB24, data, n*w);
                 if (surface) {
-                    texture = SDL_CreateTextureFromSurface(renderer, surface);
+                    texture = SDL_CreateTextureFromSurface(GetAppState()->renderer, surface);
                     SDL_DestroySurface(surface);
                 } else {
                     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "surface 创建错误：%s", SDL_GetError());
@@ -139,9 +160,9 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 
         // Rendering
         ImGui::Render();
-        SDL_SetRenderScale(renderer, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
-        ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), renderer);
-        SDL_RenderPresent(renderer);
+        SDL_SetRenderScale(GetAppState()->renderer, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
+        ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), GetAppState()->renderer);
+        SDL_RenderPresent(GetAppState()->renderer);
     
         // 计算帧率
         frame_time = SDL_GetTicks() - frame_start;
@@ -161,8 +182,8 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result)
     ImGui_ImplSDL3_Shutdown();
     ImGui::DestroyContext();
 
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(GetAppState()->renderer);
+    SDL_DestroyWindow(GetAppState()->window);
     SDL_Quit();
 }
 

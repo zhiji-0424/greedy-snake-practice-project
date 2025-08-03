@@ -34,7 +34,7 @@ public:
 
     static AppState* instance;
 
-    AppState()
+    AppState() : data_path("./data/"), res_path("./res/"), system_name("Unknown"), window(nullptr), renderer(nullptr), page_manager(nullptr)
     {
         instance = this;
     }
