@@ -64,6 +64,14 @@ void PageManager::request_draw()
     need_to_draw = true;
 }
 
+void PageManager::do_event(SDL_Event* event)
+{
+    imgui_process_input(*event); // imgui处理输入
+    if (current_page)
+        current_page->handle(*event); // 处理事件
+}
+
+
 void PageManager::do_step()
 {
     // 换页
@@ -76,14 +84,6 @@ void PageManager::do_step()
         current_page->init(); // 初始化
     }
 
-    imgui_new_frame();
-
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-        imgui_process_input(event); // imgui处理输入
-        if (current_page)
-            current_page->handle(event); // 处理事件
-    }
     if (current_page)
         current_page->update(); // 更新
 
@@ -102,13 +102,11 @@ void PageManager::do_draw()
     if (!current_page)
         return;
 
-    // 渲染到目标
-    // imgui_new_frame();
+    imgui_new_frame();
     current_page->draw();
     imgui_end_frame();
 
     if (need_to_draw) {
-        // 渲染到屏幕
         imgui_render_data();
 
         // 显示
@@ -119,77 +117,48 @@ void PageManager::do_draw()
 }
 
 void PageManager::imgui_create_context() {
-// #ifndef NODEARIMGUI
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-    // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
-    //ImGui::StyleColorsLight();
-
+    io.IniFilename = "/sdcard/Documents/imgui.ini";
+    // Setup scaling
+    ImGuiStyle& style = ImGui::GetStyle();
+    float main_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
+    style.ScaleAllSizes(main_scale);        // Bake a fixed style scale. (until we have a solution for dynamic style scaling, changing this requires resetting Style + calling this again)
+    style.FontScaleDpi = main_scale;        // Set initial font scale. (using io.ConfigDpiScaleFonts=true makes this unnecessary. We leave both here for documentation purpose)
     // Setup Platform/Renderer backends
     ImGui_ImplSDL3_InitForSDLRenderer(GetAppState()->window, GetAppState()->renderer);
     ImGui_ImplSDLRenderer3_Init(GetAppState()->renderer);
-
-    // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
-    // - Read 'docs/FONTS.md' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-// #endif
+    // Fonts
+    // io.Fonts->AddFontFromFileTTF("/storage/emulated/0/Documents/Misans-Normal.ttf");
+    io.Fonts->AddFontDefault();
 }
 
 void PageManager::imgui_destroy_context() {
-// #ifndef NODEARIMGUI
-    // Cleanup
     ImGui_ImplSDLRenderer3_Shutdown();
     ImGui_ImplSDL3_Shutdown();
     ImGui::DestroyContext();
-// #endif
 }
 
 void PageManager::imgui_process_input(const SDL_Event& event) {
-    (void)event;
-// #ifndef NODEARIMGUI
     ImGui_ImplSDL3_ProcessEvent(&event);
-// #endif
 }
 
 void PageManager::imgui_new_frame() {
-// #ifndef NODEARIMGUI
     // Start the Dear ImGui frame
     ImGui_ImplSDLRenderer3_NewFrame();
     ImGui_ImplSDL3_NewFrame();
     ImGui::NewFrame();
-// #endif
 }
 
 void PageManager::imgui_end_frame() {
-// #ifndef NODEARIMGUI
-    // end_frame
     ImGui::Render();
-// #endif
 }
 
 void PageManager::imgui_render_data() {
-// #ifndef NODEARIMGUI
-    // Rendering
     ImGuiIO& io = ImGui::GetIO();
     SDL_SetRenderScale(GetAppState()->renderer, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
     ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), GetAppState()->renderer);
-// #endif
 }

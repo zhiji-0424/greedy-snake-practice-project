@@ -15,6 +15,7 @@ set(SNAKE_SOURCE_FILES
     code/ScoreManager.cpp
     code/Snake.cpp
     code/Wall.cpp
+    code/HelloPage.cpp
 )
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")

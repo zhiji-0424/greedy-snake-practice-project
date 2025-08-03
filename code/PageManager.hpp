@@ -21,6 +21,7 @@ class PageManager {
         // 由主程序调用
         bool ready_to_exit() {return exit_requested;}
 
+        void do_event(SDL_Event* event);
         void do_step();     // 在这里换页（调用完 Page->step() 之后）
         void do_draw();
     private:
