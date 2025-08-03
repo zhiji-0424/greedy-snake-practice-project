@@ -88,6 +88,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 
 void SDL_AppQuit(void *appstate, SDL_AppResult result)
 {
+    delete GetAppState()->page_manager;
     SDL_DestroyRenderer(GetAppState()->renderer);
     SDL_DestroyWindow(GetAppState()->window);
     delete GetAppState();
