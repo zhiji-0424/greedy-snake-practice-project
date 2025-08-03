@@ -56,6 +56,10 @@ void PageManager::request_page(Page* new_page_)
         delete new_page;
     }
     new_page = new_page_;
+    if (current_page) {
+        delete current_page;
+        current_page = nullptr;
+    }
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "%s: request_page() %s --> %s", "PageManager", current_page->page_name.c_str(), new_page_->page_name.c_str());
 }
 
@@ -99,8 +103,10 @@ void PageManager::do_step()
 
 void PageManager::do_draw()
 {
-    if (!current_page)
+    if (!current_page) {
+        need_to_draw = false;
         return;
+    }
 
     imgui_new_frame();
     current_page->draw();
