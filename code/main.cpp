@@ -57,7 +57,6 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
     return SDL_APP_CONTINUE;
 }
 
-Uint64 frame_time = 0;
 int target_fps = 60;
 
 SDL_AppResult SDL_AppIterate(void *appstate)
@@ -70,15 +69,13 @@ SDL_AppResult SDL_AppIterate(void *appstate)
         return SDL_APP_SUCCESS;
     }
 
-    ImGui::SliderInt("target fps", &target_fps, 30, 360);
-
     GetAppState()->page_manager->do_draw();
     if (GetAppState()->page_manager->ready_to_exit()) {
         return SDL_APP_SUCCESS;
     }
 
     // 计算帧率
-    frame_time = SDL_GetTicks() - frame_start;
+    Uint64 frame_time = SDL_GetTicks() - frame_start;
     if (1000.0f/target_fps > frame_time*1.0) {
         SDL_Delay(1000.0f/target_fps - frame_time*1.0);
     }

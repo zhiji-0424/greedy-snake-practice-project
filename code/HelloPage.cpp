@@ -54,6 +54,8 @@ void HelloPage::update()
     
 }
 
+extern int target_fps;
+
 void HelloPage::draw()
 {
     ImGuiIO& io = ImGui::GetIO();
@@ -76,6 +78,10 @@ void HelloPage::draw()
     // ImGui::InputTextMultiline("str", buf, 100000, ImVec2(800,0));
     // ImGui::Text("%s", editing_text);
     ImGui::End();
+
+    ImGui::SliderInt("target fps", &target_fps, 30, 360);
+    float main_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
+    ImGui::Text("main scale: %.2f", main_scale);
 
     if (!image_loaded) {
         unsigned char *data = stbi_load("/storage/emulated/0/Download/20250625135715.png", &w, &h, &n, 0);
