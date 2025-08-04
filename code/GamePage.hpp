@@ -16,7 +16,7 @@ class GamePage : public Page
     void update();
     void draw();
     private:
-    TileMap tileMap;
+    TileMap tile_map;
 };
 
 #endif // GAMEPAGE_HPP_INCLUDED

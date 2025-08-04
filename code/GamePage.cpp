@@ -1,4 +1,7 @@
 #include "GamePage.hpp"
+#include "Food.hpp"
+
+Food food;
 
 GamePage::GamePage()
 {
@@ -12,7 +15,7 @@ GamePage::~GamePage()
 
 void GamePage::init()
 {
-
+    
 }
 
 void GamePage::handle(const SDL_Event& event)
@@ -26,13 +29,24 @@ void GamePage::handle(const SDL_Event& event)
 
 void GamePage::update()
 {
-
+    tile_map.init();
+    tile_map.SetPosition(0, 0);
+    int w, h;
+    SDL_GetCurrentRenderOutputSize(GetAppState()->renderer, &w, &h);
+    tile_map.SetSize(w, h);
+    tile_map.SetTileNum(20, 10);
+    tile_map.update();
 }
 
 void GamePage::draw()
 {
     SDL_SetRenderDrawColorFloat(GetAppState()->renderer, 0.0f, 0.0f, 1.0f, 1.0f);
     SDL_RenderClear(GetAppState()->renderer);
+
+    for (int i=0; i<200; i++) {
+        food.create(20, 10);
+        tile_map.draw(food.GetTextureID(), food.x, food.y);
+    }
 
     GetAppState()->page_manager->request_draw();
 }
