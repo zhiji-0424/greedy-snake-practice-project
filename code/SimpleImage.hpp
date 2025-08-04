@@ -48,9 +48,8 @@ class SimpleImage {
             if (data) {
                 // 从data创建texture
                 SDL_PixelFormat format = ((channels==3) ? SDL_PIXELFORMAT_RGB24 : SDL_PIXELFORMAT_RGBA32);
+                // !!!不会复制像素数据。像素数据不受自动管理；在释放像素数据之前，必须先释放表面。!!!
                 SDL_Surface* surface = SDL_CreateSurfaceFrom(width, height, format, data, width * channels);
-                stbi_image_free(data);
-                data = nullptr;
                 if (surface) {
                     // 转换surface为texture
                     SDL_Texture* texture = SDL_CreateTextureFromSurface(GetAppState()->renderer, surface);
@@ -65,6 +64,9 @@ class SimpleImage {
                 } else {
                     SDL_LogError(SDL_LOG_CATEGORY_ERROR, "%s:无法从data创建surface: %s", SimpleImage_DEBUG_TAG, SDL_GetError());
                 }
+                // 在释放像素数据之前，必须先释放表面。
+                stbi_image_free(data);
+                data = nullptr;
             } else {
                 SDL_LogError(SDL_LOG_CATEGORY_ERROR, "%s:stbi_load失败: %s", SimpleImage_DEBUG_TAG, stbi_failure_reason());
             }
