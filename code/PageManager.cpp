@@ -28,12 +28,15 @@ PageManager::~PageManager()
 
 void PageManager::first_page(Page* first_page)
 {
-    if (new_page) {
-        delete new_page;
+    if (first_page) {
+        if (new_page) {
+            delete new_page;
+        }
+        new_page = first_page;
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "%s:first_page(): %s", "PageManager", first_page->page_name.c_str());
+    } else {
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "%s:first_page(): NULL", "PageManager");
     }
-    new_page = first_page;
-    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "%s:first_page(): %s", "PageManager", first_page->page_name.c_str());
-
     // 播放背景音乐
     // bgm = Mix_LoadMUS((GetAppState()->res_path + "audio/Roa - Bloom.mp3").c_str());
     // if (!bgm) {
