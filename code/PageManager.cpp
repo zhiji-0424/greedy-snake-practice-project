@@ -138,10 +138,10 @@ void PageManager::imgui_create_context() {
     ImGui_ImplSDL3_InitForSDLRenderer(GetAppState()->window, GetAppState()->renderer);
     ImGui_ImplSDLRenderer3_Init(GetAppState()->renderer);
     // Fonts
-    if (SDL_GetPlatform() == "Android") {
+    if (SDL_GetPlatform() == std::string("Android")) {
         io.Fonts->AddFontFromFileTTF("/storage/emulated/0/Documents/Misans-Normal.ttf");
     } else {
-        io.Fonts->AddFontFromFileTTF("FlyFlowerSong.ttf");
+        io.Fonts->AddFontFromFileTTF("Misans-Normal.ttf");
     }
     io.Fonts->AddFontDefault();
 }

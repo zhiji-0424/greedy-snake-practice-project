@@ -24,6 +24,26 @@ else()
     add_executable(eating-snake ${SNAKE_SOURCE_FILES})
 endif()
 
+# 编译警告
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    # GCC/Clang 选项
+    target_compile_options(eating-snake PRIVATE
+        -Wno-unused-parameter   # 禁用未使用参数警告
+        -Wall                   # 基本警告
+        -Wextra                 # 额外警告
+        -Wpedantic              # 严格模式
+        -Werror                 # 警告视为错误
+    )
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    # MSVC 选项
+    target_compile_options(eating-snake PRIVATE
+        /wd4100             # 禁用未使用参数警告
+        /W4                 # 基本警告（/W4 更严格）
+        /permissive         # 严格模式
+        /WX                 # 警告视为错误
+    )
+endif()
+
 # 链接库
 target_link_libraries(eating-snake
     SDL3::SDL3
