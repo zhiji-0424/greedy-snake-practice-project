@@ -17,7 +17,9 @@ LOCAL_SRC_FILES := \
     $(SRC_DIR)/ScoreManager.cpp \
     $(SRC_DIR)/Snake.cpp \
     $(SRC_DIR)/Wall.cpp \
-    $(SRC_DIR)/HelloPage.cpp
+    $(SRC_DIR)/HelloPage.cpp \
+    $(SRC_DIR)/TileMap.cpp \
+    $(SRC_DIR)/GamePage.cpp
 
 # 调试开关(0:no,  1:yes)，可以命令行设置
 use_debug_loader ?= 0
