@@ -59,11 +59,13 @@ void PageManager::request_page(Page* new_page_)
         delete new_page;
     }
     new_page = new_page_;
+    std::string page_name;
     if (current_page) {
+        page_name = current_page->page_name;
         delete current_page;
         current_page = nullptr;
     }
-    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "%s: request_page() %s --> %s", "PageManager", current_page->page_name.c_str(), new_page_->page_name.c_str());
+    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "%s: request_page() %s --> %s", "PageManager", page_name.c_str(), new_page_->page_name.c_str());
 }
 
 void PageManager::request_draw()
