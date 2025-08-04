@@ -16,6 +16,7 @@ set(SNAKE_SOURCE_FILES
     code/Snake.cpp
     code/Wall.cpp
     code/HelloPage.cpp
+    code/TileMap.cpp
 )
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
