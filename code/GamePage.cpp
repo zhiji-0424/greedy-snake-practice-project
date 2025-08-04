@@ -29,7 +29,6 @@ void GamePage::handle(const SDL_Event& event)
 
 void GamePage::update()
 {
-    tile_map.init();
     tile_map.SetPosition(0, 0);
     int w, h;
     SDL_GetCurrentRenderOutputSize(GetAppState()->renderer, &w, &h);

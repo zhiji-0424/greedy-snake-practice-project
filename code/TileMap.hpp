@@ -13,7 +13,6 @@ class TileMap
     {
     }
 
-    void init();
     void update();                                  // 更新瓦片大小
     void draw(ImTextureID texture, int x, int y);    // 绘制单个瓦片
 

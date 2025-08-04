@@ -1,11 +1,6 @@
 #include "TileMap.hpp"
 #include "imgui.h"
 
-void TileMap::init()
-{
-
-}
-
 void TileMap::update()
 {
     // 根据宽高和瓦片数量设置瓦片大小，要比较两者宽高比例
