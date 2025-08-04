@@ -4,6 +4,7 @@
 #include <imgui_impl_sdl3.h>
 #include <imgui_impl_sdlrenderer3.h>
 #include <stb_image.h>
+#include "SimpleImage.hpp"
 
 HelloPage::HelloPage()
 {
@@ -55,6 +56,7 @@ void HelloPage::update()
 }
 
 extern int target_fps;
+SimpleImage *image;
 
 void HelloPage::draw()
 {
@@ -84,22 +86,12 @@ void HelloPage::draw()
     ImGui::Text("main scale: %.2f", main_scale);
 
     if (!image_loaded) {
-        unsigned char *data = stbi_load("/storage/emulated/0/Download/20250625135715.png", &w, &h, &n, 0);
-        if (data) {
-            SDL_Surface *surface = SDL_CreateSurfaceFrom(w, h, SDL_PIXELFORMAT_RGB24, data, n*w);
-            if (surface) {
-                texture = SDL_CreateTextureFromSurface(GetAppState()->renderer, surface);
-                SDL_DestroySurface(surface);
-            } else {
-                SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "surface 创建错误：%s", SDL_GetError());
-            }
-            stbi_image_free(data);
-        } else {
-            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "stb加载错误：%s", stbi_failure_reason());
-        }
+        image = new SimpleImage();
+        image->load_image("123.png");
+        image->GetTextureInfo(w, h, n);
         image_loaded = true;
     }
     ImGui::Text("宽：%d，高：%d，通道：%d", w, h, n);
-    ImGui::Image((ImTextureID)(intptr_t)texture, ImVec2(w*scale, h*scale));
+    ImGui::Image(image->GetTextureID(), ImVec2(w*scale, h*scale));
     GetAppState()->page_manager->request_draw();
 }

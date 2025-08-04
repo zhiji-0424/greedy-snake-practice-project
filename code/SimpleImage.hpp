@@ -14,6 +14,7 @@
 class SimpleImage {
     protected:
         SDL_Texture* m_texture;
+        int width, height, channels;    // 图片的宽高和通道数
 
     public:
         SimpleImage() {
@@ -43,7 +44,6 @@ class SimpleImage {
         }
         void load_image(const char* path) {
             // 使用stb_image.h加载png图像
-            int width, height, channels;
             unsigned char* data = stbi_load(path, &width, &height, &channels, 0);
             if (data) {
                 // 从data创建texture
@@ -73,14 +73,21 @@ class SimpleImage {
         }
 
         //获取纹理
-        SDL_Texture* GetTexture()
+        SDL_Texture* GetTexture() const
         {
             return m_texture;
         }
 
-        ImTextureID GetTextureID()
+        ImTextureID GetTextureID() const
         {
             return (ImTextureID)(intptr_t)m_texture;
+        }
+
+        void GetTextureInfo(int& w, int& h, int& channels) const
+        {
+            w = width;
+            h = height;
+            channels = this->channels;
         }
 
         // void draw(int x, int y, int w, int h) {
