@@ -19,12 +19,14 @@ class TileMap
     void SetPosition(int x, int y);                 // 设置Map位置
     void SetSize(int w, int h);                     // 设置Map大小
     void SetTileNum(int n_tile_x, int n_tile_y);    // 设置瓦片数量
+    void SetExternalPadding(int padding_x, int padding_y);        // 设置Map外边距
 
     private:
     int x, y;               // 左上角坐标
     int w, h;               // 宽高
     int n_tile_x, n_tile_y; // 瓦片数量
     int tile_size;          // 瓦片大小（正方形）
+    int padding_x, padding_y; // Map外边距
 };
 
 #endif // TILEMAP_HPP_INCLUDED  

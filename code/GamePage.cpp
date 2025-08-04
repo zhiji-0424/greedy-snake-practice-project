@@ -29,11 +29,12 @@ void GamePage::handle(const SDL_Event& event)
 
 void GamePage::update()
 {
-    tile_map.SetPosition(0, 0);
     int w, h;
     SDL_GetCurrentRenderOutputSize(GetAppState()->renderer, &w, &h);
     tile_map.SetSize(w, h);
     tile_map.SetTileNum(20, 10);
+    tile_map.SetPosition(0, 0);
+    tile_map.SetExternalPadding(10, 10);
     tile_map.update();
 }
 
