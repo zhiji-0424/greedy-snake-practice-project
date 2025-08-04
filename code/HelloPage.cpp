@@ -27,7 +27,7 @@ void HelloPage::handle(const SDL_Event& event)
     }
 }
 
-float scale = 1.0f;
+float scale = 4.1f;
 
 void HelloPage::update()
 {

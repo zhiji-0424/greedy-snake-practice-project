@@ -4,6 +4,7 @@
 #include "Page.hpp"
 #include "PageManager.hpp"
 #include "AppState.hpp"
+#include "TileMap.hpp"
 
 class GamePage : public Page
 {
@@ -15,6 +16,7 @@ class GamePage : public Page
     void update();
     void draw();
     private:
+    TileMap tileMap;
 };
 
 #endif // GAMEPAGE_HPP_INCLUDED

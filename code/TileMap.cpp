@@ -1,15 +1,5 @@
 #include "TileMap.hpp"
 
-TileMap::TileMap()
-{
-    
-}
-
-TileMap::~TileMap()
-{
-    
-}
-
 void TileMap::init()
 {
     
@@ -20,7 +10,12 @@ void TileMap::update()
     
 }
 
-void TileMap::draw()
+void TileMap::draw(ImTextureID texture)
 {
     
+}
+
+void TileMap::clear()
+{
+
 }
