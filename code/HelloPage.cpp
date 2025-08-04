@@ -5,6 +5,7 @@
 #include <imgui_impl_sdlrenderer3.h>
 #include <stb_image.h>
 #include "SimpleImage.hpp"
+#include "Food.hpp"
 
 HelloPage::HelloPage()
 {
@@ -21,9 +22,6 @@ void HelloPage::init()
 
 }
 
-#include <stdlib.h>
-char editing_text[100000];
-
 void HelloPage::handle(const SDL_Event& event)
 {
     if (event.type == SDL_EVENT_QUIT) {
@@ -31,24 +29,9 @@ void HelloPage::handle(const SDL_Event& event)
     } else if (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_AC_BACK) {
         GetAppState()->page_manager->request_exit();
     }
-    if (event.type == SDL_EVENT_FINGER_DOWN) {
-        //if (!SDL_TextInputActive(window))
-            //SDL_StartTextInput(window);
-    }
-    if (event.type == SDL_EVENT_TEXT_EDITING) {
-        sprintf(editing_text, "%s", event.edit.text);
-    }
-    if (event.type == SDL_EVENT_TEXT_INPUT) {
-        sprintf(editing_text, "%s", event.text.text);
-    }
 }
 
-bool image_loaded = false;
-int w, h, n;
-SDL_Texture *texture = 0;
 float scale = 1.0f;
-char buf[100000];
-bool need_draw = true;
 
 void HelloPage::update()
 {
@@ -56,7 +39,7 @@ void HelloPage::update()
 }
 
 extern int target_fps;
-SimpleImage *image;
+
 
 void HelloPage::draw()
 {
@@ -76,7 +59,7 @@ void HelloPage::draw()
     ImGui::Begin("hhh");
     ImGui::Text("frame rate: %.1f", io.Framerate);
     ImGui::Text("SDL_TextInputActive(window): %s", SDL_TextInputActive(GetAppState()->window)?"yes":"no");
-    ImGui::SliderFloat("缩放蒽蒽蒽蒽蒽蒽蒽蒽图片", &scale, 0, 5);
+    ImGui::SliderFloat("缩放图片", &scale, 0, 5);
     // ImGui::InputTextMultiline("str", buf, 100000, ImVec2(800,0));
     // ImGui::Text("%s", editing_text);
     ImGui::End();
@@ -84,14 +67,5 @@ void HelloPage::draw()
     ImGui::SliderInt("target fps", &target_fps, 30, 360);
     float main_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
     ImGui::Text("main scale: %.2f", main_scale);
-
-    if (!image_loaded) {
-        image = new SimpleImage();
-        image->load_image("123.png");
-        image->GetTextureInfo(w, h, n);
-        image_loaded = true;
-    }
-    ImGui::Text("宽：%d，高：%d，通道：%d", w, h, n);
-    ImGui::Image(image->GetTextureID(), ImVec2(w*scale, h*scale));
     GetAppState()->page_manager->request_draw();
 }

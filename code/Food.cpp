@@ -4,7 +4,6 @@ Food::Food()
 {
     x = 0;
     y = 0;
-    food_image.load_image(GetAppState()->res_path + "snake_appearance/food.png");
 }
 
 void Food::create(int nw, int nh)
@@ -12,6 +11,11 @@ void Food::create(int nw, int nh)
     // 需要重置种子，保证每次随机数不同
     x = rand() % (nw==0? 1 : nw);
     y = rand() % (nh==0? 1 : nh);
+
+    if (!image_loaded) {
+        food_image.load_image(GetAppState()->res_path + "snake_appearance/food.png");
+        image_loaded = true;
+    }
 }
 
 Food::~Food()
