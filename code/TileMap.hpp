@@ -15,11 +15,11 @@ class TileMap
 
     void init();
     void update();
-    void draw(ImTextureID texture);
-    void clear();
+    void draw(ImTextureID texture, int x, int y);
 
     void SetPosition(int x, int y);
     void SetSize(int w, int h);
+    void SetTileNum(int n_tile_x, int n_tile_y);
 
     private:
     int x, y;               // 左上角坐标
@@ -28,4 +28,4 @@ class TileMap
     int tile_size;          // 瓦片大小
 };
 
-#endif // TILEMAP_HPP_INCLUDED
+#endif // TILEMAP_HPP_INCLUDED  
