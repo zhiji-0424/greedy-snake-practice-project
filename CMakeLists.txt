@@ -17,6 +17,7 @@ set(SNAKE_SOURCE_FILES
     code/Wall.cpp
     code/HelloPage.cpp
     code/TileMap.cpp
+    code/GamePage.cpp
 )
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")

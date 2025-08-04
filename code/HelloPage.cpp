@@ -1,11 +1,7 @@
 #include "HelloPage.hpp"
 #include <SDL3/SDL.h>
 #include <imgui.h>
-#include <imgui_impl_sdl3.h>
-#include <imgui_impl_sdlrenderer3.h>
-#include <stb_image.h>
-#include "SimpleImage.hpp"
-#include "Food.hpp"
+#include "GamePage.hpp"
 
 HelloPage::HelloPage()
 {
@@ -35,7 +31,9 @@ float scale = 1.0f;
 
 void HelloPage::update()
 {
-    
+    if (scale > 4.0f) {
+        GetAppState()->page_manager->request_page(new GamePage());
+    }
 }
 
 extern int target_fps;
