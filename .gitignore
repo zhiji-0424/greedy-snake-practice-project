@@ -11,3 +11,6 @@ build/
 jniLibs/
 obj/
 libs/
+
+# clang 构建输出
+.cache/
