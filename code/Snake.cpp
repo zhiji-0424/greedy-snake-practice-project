@@ -108,9 +108,9 @@ void Snake::forward(int nw, int nh)
 
     // 更新蛇头位置
     if (head.direction == SnakeDirection::up) {
-        head.y++; // 向上移动
+        head.y--; // 向上移动
     } else if (head.direction == SnakeDirection::down) {
-        head.y--; // 向下移动
+        head.y++; // 向下移动
     } else if (head.direction == SnakeDirection::left) {
         head.x--; // 向左移动
     } else if (head.direction == SnakeDirection::right) {
