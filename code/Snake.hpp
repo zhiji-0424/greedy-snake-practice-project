@@ -12,24 +12,8 @@ enum class SnakeDirection
     up, down, left, right, // 四个方向
     zero
 };
-std::string to_string(SnakeDirection direction)
-{
-    switch (direction)
-    {
-    case SnakeDirection::up:
-        return "up";
-    case SnakeDirection::down:
-        return "down";
-    case SnakeDirection::left:
-        return "left";
-    case SnakeDirection::right:
-        return "right";
-    case SnakeDirection::zero:
-        return "zero";
-    default:
-        return "unknown";
-    }
-}
+
+std::string to_string(SnakeDirection direction);
 
 typedef struct snake_node_st
 {
@@ -50,28 +34,34 @@ class Snake {
         Snake();
         ~Snake();
 
-        void reset(); // 初始化这条蛇
+        void init();    // 初始化（只能开始时调用一次）
+        void reset();   // 初始化这条蛇
         void kill();
 
-        void forward(int nw, int nh);               // 画布的横竖格数
-        void delete_tail();                         // 删除一节尾巴
-        void change_direction(SnakeDirection direction);      // 提交更改蛇头方向(可能不接受更改)
-        void set_head_position(int x, int y);       // 设置蛇头位置
-        void set_head_direction(SnakeDirection direction);    // 设置蛇头方向
+        void forward(int nw, int nh);                           // 画布的横竖格数
+        void delete_tail();                                     // 删除一节尾巴
+        void change_direction(SnakeDirection direction);        // 提交更改蛇头方向(可能不接受更改)
+        void set_head_position(int x, int y);                   // 设置蛇头位置
+        void set_head_direction(SnakeDirection direction);      // 设置蛇头方向
+        void get_position(int& x, int& y, int index) const;                 // 获取蛇各节点位置
+        void get_direction(SnakeDirection& direction, int index) const;     // 获取蛇各节点方向
+        void get_last_direction(SnakeDirection& direction, int index) const;     // 获取蛇各节点上一个方向
 
         bool is_eat_food(int x, int y) const;
         bool is_eat_self() const;
         bool is_food_in_snake(int x, int y) const;
         bool is_in_wall(int nw, int nh) const;
 
-        void draw(const vec4& canvas, int nw, int nh);  // 画布的位置、大小（像素）
-        // void set_color_head(int color_r, int color_g, int color_b);
-        // void set_color_body(int color_r, int color_g, int color_b);
-
         int get_length() const {return length;};
+        ImTextureID get_head_texture_id() const {return head_img.GetTextureID();};
+        ImTextureID get_body_texture_id() const {return body_img.GetTextureID();};
+        ImTextureID get_body_corner_texture_id() const {return body_corner_img.GetTextureID();};
+        ImTextureID get_tail_texture_id() const {return tail_img.GetTextureID();};
 
         double get_degree(SnakeDirection direction, SnakeDirection last_direction) const; // 获取方向对应的角度
         double get_degree(SnakeDirection direction) const;
+
+        bool can_through_wall = false;
     private:
         int length;
         SnakeNode head;

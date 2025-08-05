@@ -1,7 +1,7 @@
 #include "GamePage.hpp"
-#include "Food.hpp"
+#include "Snake.hpp"
 
-Food food;
+Snake snake;
 
 GamePage::GamePage()
 {
@@ -15,7 +15,11 @@ GamePage::~GamePage()
 
 void GamePage::init()
 {
-    
+    snake.init();
+    snake.set_head_direction(SnakeDirection::up);
+    snake.forward(10, 10);
+    snake.forward(10, 10);
+    snake.forward(10, 10);
 }
 
 void GamePage::handle(const SDL_Event& event)
@@ -36,6 +40,9 @@ void GamePage::update()
     tile_map.SetPosition(0, 0);
     tile_map.SetExternalPadding(10, 10);
     tile_map.update();
+
+    snake.forward(10, 10);
+    snake.delete_tail();    
 }
 
 void GamePage::draw()
@@ -44,8 +51,12 @@ void GamePage::draw()
     SDL_RenderClear(GetAppState()->renderer);
 
     for (int i=0; i<200; i++) {
-        food.create(20, 10);
-        tile_map.draw(food.GetTextureID(), food.x, food.y);
+        // Snake
+        int x, y;
+        // SnakeDirection d;
+        snake.get_position(x, y, i);
+        // snake.get_direction(d, i);
+        tile_map.draw(snake.get_head_texture_id(), x, y);
     }
 
     GetAppState()->page_manager->request_draw();

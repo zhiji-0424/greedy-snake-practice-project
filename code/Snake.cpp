@@ -13,6 +13,34 @@ static SnakeNode* alloc_node()
     return node;
 }
 
+std::string to_string(SnakeDirection direction)
+{
+    switch (direction)
+    {
+    case SnakeDirection::up:
+        return "up";
+    case SnakeDirection::down:
+        return "down";
+    case SnakeDirection::left:
+        return "left";
+    case SnakeDirection::right:
+        return "right";
+    case SnakeDirection::zero:
+        return "zero";
+    default:
+        return "unknown";
+    }
+}
+
+void Snake::init()
+{
+    reset();
+    head_img.load_image(        GetAppState()->res_path + "snake_appearance/head.png");
+    body_img.load_image(        GetAppState()->res_path + "snake_appearance/body.png");
+    body_corner_img.load_image( GetAppState()->res_path + "snake_appearance/body_corner.png");
+    tail_img.load_image(        GetAppState()->res_path + "snake_appearance/tail.png");
+}
+
 void Snake::reset()
 {
     kill();
@@ -35,11 +63,6 @@ void Snake::kill()
 Snake::Snake()
 {
     reset();
-
-    head_img.load_image(        GetAppState()->res_path + "snake_appearance/head.png");
-    body_img.load_image(        GetAppState()->res_path + "snake_appearance/body.png");
-    body_corner_img.load_image( GetAppState()->res_path + "snake_appearance/body_corner.png");
-    tail_img.load_image(        GetAppState()->res_path + "snake_appearance/tail.png");
 }
 
 Snake::~Snake()
@@ -64,36 +87,6 @@ void Snake::change_direction(SnakeDirection d)
     }
 }
 
-// 更新蛇头位置
-static void update_head(SnakeNode& head, int nw, int nh)
-{
-    (void)nw;
-    (void)nh;
-
-    if (head.direction == SnakeDirection::up) {
-        head.y++; // 向上移动
-    } else if (head.direction == SnakeDirection::down) {
-        head.y--; // 向下移动
-    } else if (head.direction == SnakeDirection::left) {
-        head.x--; // 向左移动
-    } else if (head.direction == SnakeDirection::right) {
-        head.x++; // 向右移动
-    } else {
-        LOGE("update_head(): head.direction=(%s) 方向错误！", to_string(head.direction).c_str());
-    }
-
-    // 穿墙
-    /*if (head.x < 0) {
-        head.x = nw-1;
-    } else if (head.x > nw-1) {
-        head.x = 0;
-    } else if (head.y < 0) {
-        head.y = nh-1;
-    } else if (head.y > nh-1) {
-        head.y = 0;
-    }*/
-}
-
 void Snake::forward(int nw, int nh)
 {
     // 在头节点后加入节点
@@ -110,8 +103,34 @@ void Snake::forward(int nw, int nh)
     node->direction = head.direction;
     node->last_direction = head.last_direction;
 
-    update_head(head, nw, nh);
+    // 更新蛇头方向
     head.last_direction = head.direction;
+
+    // 更新蛇头位置
+    if (head.direction == SnakeDirection::up) {
+        head.y++; // 向上移动
+    } else if (head.direction == SnakeDirection::down) {
+        head.y--; // 向下移动
+    } else if (head.direction == SnakeDirection::left) {
+        head.x--; // 向左移动
+    } else if (head.direction == SnakeDirection::right) {
+        head.x++; // 向右移动
+    } else {
+        LOGE("update_head(): head.direction=(%s) 方向错误！", to_string(head.direction).c_str());
+    }
+
+    // 穿墙处理
+    if (can_through_wall) {
+        if (head.x < 0) {
+            head.x = nw-1;
+        } else if (head.x > nw-1) {
+            head.x = 0;
+        } else if (head.y < 0) {
+            head.y = nh-1;
+        } else if (head.y > nh-1) {
+            head.y = 0;
+        }
+    }
 }
 
 void Snake::delete_tail()
@@ -139,6 +158,43 @@ void Snake::set_head_position(int x, int y)
 void Snake::set_head_direction(SnakeDirection d)
 {
     head.direction = d;
+}
+
+void Snake::get_position(int& x, int& y, int index) const
+{
+    const SnakeNode* node = &head;
+    while (node && index > 0) {
+        node = node->next;
+        index--;
+    }
+    if (node) {
+        x = node->x;
+        y = node->y;
+    }
+}
+
+void Snake::get_direction(SnakeDirection& direction, int index) const
+{
+    const SnakeNode* node = &head;
+    while (node && index > 0) {
+        node = node->next;
+        index--;
+    }
+    if (node) {
+        direction = node->direction;
+    }
+}
+
+void Snake::get_last_direction(SnakeDirection& direction, int index) const
+{
+    const SnakeNode* node = &head;
+    while (node && index > 0) {
+        node = node->next;
+        index--;
+    }
+    if (node) {
+        direction = node->last_direction;
+    }
 }
 
 bool Snake::is_eat_food(int x, int y) const
