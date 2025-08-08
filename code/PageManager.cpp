@@ -146,7 +146,7 @@ void PageManager::imgui_create_context() {
     if (SDL_GetPlatform() == std::string("Android")) {
         io.Fonts->AddFontFromFileTTF("/storage/emulated/0/Documents/Misans-Normal.ttf");
     } else {
-        io.Fonts->AddFontFromFileTTF("Misans-Normal.ttf");
+        io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/msyh.ttc");
     }
     io.Fonts->AddFontDefault();
 }
