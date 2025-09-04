@@ -46,13 +46,12 @@ void HelloPage::draw()
     SDL_SetRenderDrawColorFloat(GetAppState()->renderer, 1, 1, 1, 1);
     SDL_RenderClear(GetAppState()->renderer);
 
-    ImGui::Begin("hhh");
-    ImGui::Text("frame rate: %.1f", io.Framerate);
-    ImGui::Text("SDL_TextInputActive(window): %s", SDL_TextInputActive(GetAppState()->window)?"yes":"no");
+    ImGui::Begin("hhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+    ImGui::Text("帧率: %.1f", io.Framerate);
     ImGui::SliderFloat("缩放图片", &scale, 0, 5);
-    ImGui::SliderInt("target fps", &target_fps, 30, 360);
+    ImGui::SliderInt("目标帧率", &target_fps, 30, 360);
     float main_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
-    ImGui::Text("main scale: %.2f", main_scale);
+    ImGui::Text("主显示器缩放: %.2f", main_scale);
     ImGui::End();
 
     GetAppState()->page_manager->request_draw();

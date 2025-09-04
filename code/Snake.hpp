@@ -53,10 +53,11 @@ class Snake {
         bool is_in_wall(int nw, int nh) const;
 
         int get_length() const {return length;};
-        ImTextureID get_head_texture_id() const {return head_img.GetTextureID();};
-        ImTextureID get_body_texture_id() const {return body_img.GetTextureID();};
-        ImTextureID get_body_corner_texture_id() const {return body_corner_img.GetTextureID();};
-        ImTextureID get_tail_texture_id() const {return tail_img.GetTextureID();};
+        ImTextureID get_head_texture_id(int index) const;           // index 是 head_img 的下标
+        ImTextureID get_body_texture_id(int index) const;           // index 是 body_img 的下标
+        ImTextureID get_body_corner_texture_id(int index) const;    // index 是 body_corner_img 的下标
+        ImTextureID get_tail_texture_id(int index) const;           // index 是 tail_img 的下标
+        ImTextureID get_texture_id(int index) const;  // index 是从头(0)开始的下标
 
         double get_degree(SnakeDirection direction, SnakeDirection last_direction) const; // 获取方向对应的角度
         double get_degree(SnakeDirection direction) const;
@@ -65,10 +66,10 @@ class Snake {
     private:
         int length;
         SnakeNode head;
-        SimpleImage head_img;
-        SimpleImage body_img;
-        SimpleImage body_corner_img;
-        SimpleImage tail_img;
+        SimpleImage head_img[4];
+        SimpleImage body_img[4];
+        SimpleImage body_corner_img[8];
+        SimpleImage tail_img[4];
 };
 
 

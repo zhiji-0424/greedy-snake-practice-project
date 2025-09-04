@@ -59,16 +59,16 @@ class SimpleImage {
                         SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_LINEAR);
                         set_image(texture);
                     } else {
-                        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "%s:无法从surface创建texture: %s", SimpleImage_DEBUG_TAG, SDL_GetError());
+                        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "%s:无法从surface创建texture: %s, (%s)", SimpleImage_DEBUG_TAG, SDL_GetError(), path);
                     }
                 } else {
-                    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "%s:无法从data创建surface: %s", SimpleImage_DEBUG_TAG, SDL_GetError());
+                    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "%s:无法从data创建surface: %s, (%s)", SimpleImage_DEBUG_TAG, SDL_GetError(), path);
                 }
                 // 在释放像素数据之前，必须先释放表面。
                 stbi_image_free(data);
                 data = nullptr;
             } else {
-                SDL_LogError(SDL_LOG_CATEGORY_ERROR, "%s:stbi_load失败: %s", SimpleImage_DEBUG_TAG, stbi_failure_reason());
+                SDL_LogError(SDL_LOG_CATEGORY_ERROR, "%s:stbi_load失败: %s, (%s)", SimpleImage_DEBUG_TAG, stbi_failure_reason(), path);
             }
         }
 

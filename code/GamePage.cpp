@@ -20,6 +20,11 @@ void GamePage::init()
     snake.forward(10, 10);
     snake.forward(10, 10);
     snake.forward(10, 10);
+    snake.forward(10, 10);
+    snake.forward(10, 10);
+    snake.forward(10, 10);
+    snake.forward(10, 10);
+    snake.forward(10, 10);
 }
 
 void GamePage::handle(const SDL_Event& event)
@@ -28,6 +33,23 @@ void GamePage::handle(const SDL_Event& event)
         GetAppState()->page_manager->request_exit();
     } else if (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_AC_BACK) {
         GetAppState()->page_manager->request_exit();
+    }
+
+    if (event.type == SDL_EVENT_KEY_DOWN) {
+        switch (event.key.key) {
+            case SDLK_UP:
+            snake.change_direction(SnakeDirection::up);
+            break;
+            case SDLK_DOWN:
+            snake.change_direction(SnakeDirection::down);
+            break;
+            case SDLK_LEFT:
+            snake.change_direction(SnakeDirection::left);
+            break;
+            case SDLK_RIGHT:
+            snake.change_direction(SnakeDirection::right);
+            break;
+        }
     }
 }
 
@@ -43,6 +65,7 @@ void GamePage::update()
 
     snake.forward(10, 10);
     snake.delete_tail();    
+    SDL_Delay(200);
 }
 
 void GamePage::draw()
@@ -50,13 +73,13 @@ void GamePage::draw()
     SDL_SetRenderDrawColorFloat(GetAppState()->renderer, 0.0f, 0.0f, 1.0f, 1.0f);
     SDL_RenderClear(GetAppState()->renderer);
 
-    for (int i=0; i<200; i++) {
+    for (int i=0; i<snake.get_length(); i++) {
         // Snake
         int x, y;
         // SnakeDirection d;
         snake.get_position(x, y, i);
         // snake.get_direction(d, i);
-        tile_map.draw(snake.get_head_texture_id(), x, y);
+        tile_map.draw(snake.get_texture_id(i), x, y);
     }
 
     GetAppState()->page_manager->request_draw();

@@ -35,10 +35,29 @@ std::string to_string(SnakeDirection direction)
 void Snake::init()
 {
     reset();
-    head_img.load_image(        GetAppState()->res_path + "snake_appearance/head.png");
-    body_img.load_image(        GetAppState()->res_path + "snake_appearance/body.png");
-    body_corner_img.load_image( GetAppState()->res_path + "snake_appearance/body_corner.png");
-    tail_img.load_image(        GetAppState()->res_path + "snake_appearance/tail.png");
+    head_img[0].load_image(GetAppState()->res_path + "snake_appearance/head_u.png");
+    head_img[1].load_image(GetAppState()->res_path + "snake_appearance/head_d.png");
+    head_img[2].load_image(GetAppState()->res_path + "snake_appearance/head_l.png");
+    head_img[3].load_image(GetAppState()->res_path + "snake_appearance/head_r.png");
+
+    body_img[0].load_image(GetAppState()->res_path + "snake_appearance/body_u.png");
+    body_img[1].load_image(GetAppState()->res_path + "snake_appearance/body_d.png");
+    body_img[2].load_image(GetAppState()->res_path + "snake_appearance/body_l.png");
+    body_img[3].load_image(GetAppState()->res_path + "snake_appearance/body_r.png");
+
+    body_corner_img[0].load_image(GetAppState()->res_path + "snake_appearance/body_corner_ul.png");
+    body_corner_img[1].load_image(GetAppState()->res_path + "snake_appearance/body_corner_ur.png");
+    body_corner_img[2].load_image(GetAppState()->res_path + "snake_appearance/body_corner_dl.png");
+    body_corner_img[3].load_image(GetAppState()->res_path + "snake_appearance/body_corner_dr.png");
+    body_corner_img[4].load_image(GetAppState()->res_path + "snake_appearance/body_corner_lu.png");
+    body_corner_img[5].load_image(GetAppState()->res_path + "snake_appearance/body_corner_ld.png");
+    body_corner_img[6].load_image(GetAppState()->res_path + "snake_appearance/body_corner_ru.png");
+    body_corner_img[7].load_image(GetAppState()->res_path + "snake_appearance/body_corner_rd.png");
+
+    tail_img[0].load_image(GetAppState()->res_path + "snake_appearance/tail_u.png");
+    tail_img[1].load_image(GetAppState()->res_path + "snake_appearance/tail_d.png");
+    tail_img[2].load_image(GetAppState()->res_path + "snake_appearance/tail_l.png");
+    tail_img[3].load_image(GetAppState()->res_path + "snake_appearance/tail_r.png");
 }
 
 void Snake::reset()
@@ -142,7 +161,7 @@ void Snake::delete_tail()
             t2 = t1;
             t1 = t1->next;
         }
-        t2->last_direction = t2->direction; // 更新尾部节点的前一个节点的方向
+        t2->last_direction = t2->direction; // 更新尾部节点的前一个节点的方向(如果倒数第二节点是拐角)
         free(t1);
         t2->next = NULL;
         length--;
@@ -233,6 +252,130 @@ bool Snake::is_in_wall(int nw, int nh) const
         return true;
     }
     return false;
+}
+
+ImTextureID Snake::get_head_texture_id(int i) const
+{
+    if (i<0 || i>3) {
+        return ImTextureID_Invalid;
+    }
+    return head_img[i].GetTextureID();
+}
+
+ImTextureID Snake::get_body_texture_id(int i) const
+{
+    if (i<0 || i>3) {
+        return ImTextureID_Invalid;
+    }
+    return body_img[i].GetTextureID();
+}
+
+ImTextureID Snake::get_tail_texture_id(int i) const
+{
+    if (i<0 || i>3) {
+        return ImTextureID_Invalid;
+    }
+    return tail_img[i].GetTextureID();
+}
+
+ImTextureID Snake::get_body_corner_texture_id(int i) const
+{
+    if (i<0 || i>7) {
+        return ImTextureID_Invalid;
+    }
+    return body_corner_img[i].GetTextureID();
+}
+
+ImTextureID Snake::get_texture_id(int index) const
+{
+    if (index < 0) {
+        return ImTextureID_Invalid;
+    }
+    const SnakeNode *node = &head;
+    for (int i=0; i<length && i<index; i++) {
+        node = node->next;
+    }
+    if (index==0) {
+        switch (head.direction) {
+            case SnakeDirection::up:
+            return get_head_texture_id(0);
+            break;
+            case SnakeDirection::down:
+            return get_head_texture_id(1);
+            break;
+            case SnakeDirection::left:
+            return get_head_texture_id(2);
+            break;
+            case SnakeDirection::right:
+            return get_head_texture_id(3);
+            break;
+            default:
+            break;
+        }
+    } else if (index==length-1) {
+        switch (node->direction) {
+            case SnakeDirection::up:
+            return get_tail_texture_id(0);
+            break;
+            case SnakeDirection::down:
+            return get_tail_texture_id(1);
+            break;
+            case SnakeDirection::left:
+            return get_tail_texture_id(2);
+            break;
+            case SnakeDirection::right:
+            return get_tail_texture_id(3);
+            break;
+            default:
+            break;
+        }
+    } else if (node->direction == node->last_direction) {
+        // 笔直的蛇身
+        switch (node->direction) {
+            case SnakeDirection::up:
+            return get_body_texture_id(0);
+            break;
+            case SnakeDirection::down:
+            return get_body_texture_id(1);
+            break;
+            case SnakeDirection::left:
+            return get_body_texture_id(2);
+            break;
+            case SnakeDirection::right:
+            return get_body_texture_id(3);
+            break;
+            default:
+            break;
+        }
+    } else {
+        // 拐角的蛇身
+        if (node->last_direction == SnakeDirection::up) {
+            if (node->direction == SnakeDirection::left) {
+                return get_body_corner_texture_id(0);
+            } else {
+                return get_body_corner_texture_id(1);
+            }
+        } else if (node->last_direction == SnakeDirection::down) {
+            if (node->direction == SnakeDirection::left) {
+                return get_body_corner_texture_id(2);
+            } else {
+                return get_body_corner_texture_id(3);
+            }
+        } else if (node->last_direction == SnakeDirection::left) {
+            if (node->direction == SnakeDirection::up) {
+                return get_body_corner_texture_id(4);
+            } else {
+                return get_body_corner_texture_id(5);
+            }
+        } else if (node->last_direction == SnakeDirection::right) {
+            if (node->direction == SnakeDirection::up) {
+                return get_body_corner_texture_id(6);
+            } else {
+                return get_body_corner_texture_id(7);
+            }
+        }
+    }
+    return ImTextureID_Invalid;
 }
 
 // double Snake::get_degree(SnakeDirection direction) const {
