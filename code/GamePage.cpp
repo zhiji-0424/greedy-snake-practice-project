@@ -25,6 +25,7 @@ void GamePage::init()
     snake.forward(10, 10);
     snake.forward(10, 10);
     snake.forward(10, 10);
+    snake.can_through_wall = true;
 }
 
 void GamePage::handle(const SDL_Event& event)
@@ -53,6 +54,8 @@ void GamePage::handle(const SDL_Event& event)
     }
 }
 
+int pd_x, pd_y;
+
 void GamePage::update()
 {
     int w, h;
@@ -60,12 +63,12 @@ void GamePage::update()
     tile_map.SetSize(w, h);
     tile_map.SetTileNum(20, 10);
     tile_map.SetPosition(0, 0);
-    tile_map.SetExternalPadding(10, 10);
+    tile_map.SetExternalPadding(pd_x, pd_y);
     tile_map.update();
 
-    snake.forward(10, 10);
+    snake.forward(18, 8);
     snake.delete_tail();    
-    SDL_Delay(200);
+    // SDL_Delay(200);
 }
 
 void GamePage::draw()
@@ -73,11 +76,22 @@ void GamePage::draw()
     SDL_SetRenderDrawColorFloat(GetAppState()->renderer, 0.0f, 0.0f, 1.0f, 1.0f);
     SDL_RenderClear(GetAppState()->renderer);
 
+    ImGui::SliderInt("padding横", &pd_x, 0, 100);
+    ImGui::SliderInt("padding竖", &pd_y, 0, 100);
+
+    for (int i=0; i<20; i++) {
+        for (int j=0; j<10; j++) {
+            tile_map.draw(0, i, j);
+        }   
+    }
+
     for (int i=0; i<snake.get_length(); i++) {
         // Snake
         int x, y;
         // SnakeDirection d;
         snake.get_position(x, y, i);
+        x++;
+        y++;
         // snake.get_direction(d, i);
         tile_map.draw(snake.get_texture_id(i), x, y);
     }

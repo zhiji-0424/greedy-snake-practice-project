@@ -3,8 +3,9 @@
 
 void TileMap::update()
 {
-    // 根据宽高和瓦片数量设置瓦片大小，要比较两者宽高比例
-    float ratio_mapsize = (float)w / (float)h;
+    // 根据Map的宽高限制和瓦片的数量设置瓦片大小，要比较两者宽高比例，计算出Map能正确容纳的瓦片大小
+    // bug: 已知横或竖空间不足会出现负数，后续计算错误
+    float ratio_mapsize = (float)(w-padding_x*2) / (float)(h-padding_y*2);
     float ratio_tile = (float)n_tile_x / (float)n_tile_y;
     if (ratio_mapsize > ratio_tile) {
         tile_size = (h - padding_y * 2) / n_tile_y;
@@ -15,12 +16,13 @@ void TileMap::update()
 
 void TileMap::draw(ImTextureID texture, int x, int y)
 {
-    // 坐标系左上角的图块为原点(0,0)
+    // offset使瓦片阵列在Map的限制矩形内居中
     int offset_x = (w - padding_x * 2 - n_tile_x * tile_size) / 2;
     int offset_y = (h - padding_y * 2 - n_tile_y * tile_size) / 2;
+    // 坐标系左上角的图块为原点(0,0)
     int tile_x = x * tile_size + this->x + padding_x + offset_x;
     int tile_y = y * tile_size + this->y + padding_y + offset_y;
-    ImGui::GetForegroundDrawList()->AddImage(texture, ImVec2(tile_x, tile_y), ImVec2(tile_x + tile_size, tile_y + tile_size));
+    ImGui::GetBackgroundDrawList()->AddImage(texture, ImVec2(tile_x, tile_y), ImVec2(tile_x + tile_size, tile_y + tile_size));
 
     // // 绘制外边框
     // ImGui::GetForegroundDrawList()->AddRect(ImVec2(this->x, this->y), ImVec2(this->x + w, this->y + h), IM_COL32_WHITE);
