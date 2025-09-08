@@ -70,13 +70,14 @@ void GamePage::update()
     if (SDL_GetTicks() - snake_time > 200) {
         snake_time = SDL_GetTicks();
         snake.forward(nw, nh);
-        snake.delete_tail();
         // SDL_Delay(200);
 
         if (snake.is_eat_food(food.x, food.y)) {
             do {
                 food.create(nw, nh);
             } while (snake.is_food_in_snake(food.x, food.y));
+        } else {
+            snake.delete_tail();
         }
     }
 }
@@ -94,7 +95,7 @@ void GamePage::draw()
 
     tile_map.draw(food.GetTextureID(), food.x+1, food.y+1);
 
-    for (int i=0; i<snake.get_length(); i++) {
+    for (int i=snake.get_length()-1; i>=0; i--) {
         int x, y;
         snake.get_position(x, y, i);
         x++;
