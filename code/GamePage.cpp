@@ -1,7 +1,10 @@
 #include "GamePage.hpp"
 #include "Snake.hpp"
+#include "Food.hpp"
 
 Snake snake;
+Food food;
+int nw=18, nh=8;
 
 GamePage::GamePage()
 {
@@ -17,15 +20,13 @@ void GamePage::init()
 {
     snake.init();
     snake.set_head_direction(SnakeDirection::up);
-    snake.forward(10, 10);
-    snake.forward(10, 10);
-    snake.forward(10, 10);
-    snake.forward(10, 10);
-    snake.forward(10, 10);
-    snake.forward(10, 10);
-    snake.forward(10, 10);
-    snake.forward(10, 10);
+    snake.forward(nw, nh);
+    snake.forward(nw, nh);
     snake.can_through_wall = true;
+
+    do {
+        food.create(nw, nh);
+    } while (snake.is_food_in_snake(food.x, food.y));
 }
 
 void GamePage::handle(const SDL_Event& event)
@@ -54,21 +55,30 @@ void GamePage::handle(const SDL_Event& event)
     }
 }
 
-int pd_x, pd_y;
+Uint64 snake_time = 0;
 
 void GamePage::update()
 {
     int w, h;
     SDL_GetCurrentRenderOutputSize(GetAppState()->renderer, &w, &h);
     tile_map.SetSize(w, h);
-    tile_map.SetTileNum(20, 10);
+    tile_map.SetTileNum(nw+2, nh+2);
     tile_map.SetPosition(0, 0);
-    tile_map.SetExternalPadding(pd_x, pd_y);
+    tile_map.SetExternalPadding(10, 15);
     tile_map.update();
 
-    snake.forward(18, 8);
-    snake.delete_tail();    
-    // SDL_Delay(200);
+    if (SDL_GetTicks() - snake_time > 200) {
+        snake_time = SDL_GetTicks();
+        snake.forward(nw, nh);
+        snake.delete_tail();
+        // SDL_Delay(200);
+
+        if (snake.is_eat_food(food.x, food.y)) {
+            do {
+                food.create(nw, nh);
+            } while (snake.is_food_in_snake(food.x, food.y));
+        }
+    }
 }
 
 void GamePage::draw()
@@ -76,23 +86,19 @@ void GamePage::draw()
     SDL_SetRenderDrawColorFloat(GetAppState()->renderer, 0.0f, 0.0f, 1.0f, 1.0f);
     SDL_RenderClear(GetAppState()->renderer);
 
-    ImGui::SliderInt("padding横", &pd_x, 0, 100);
-    ImGui::SliderInt("padding竖", &pd_y, 0, 100);
-
     for (int i=0; i<20; i++) {
         for (int j=0; j<10; j++) {
             tile_map.draw(0, i, j);
         }   
     }
 
+    tile_map.draw(food.GetTextureID(), food.x+1, food.y+1);
+
     for (int i=0; i<snake.get_length(); i++) {
-        // Snake
         int x, y;
-        // SnakeDirection d;
         snake.get_position(x, y, i);
         x++;
         y++;
-        // snake.get_direction(d, i);
         tile_map.draw(snake.get_texture_id(i), x, y);
     }
 

@@ -15,7 +15,7 @@ class TileMap
     }
 
     void update();                                      // 更新瓦片大小
-    void draw(ImTextureID texture, int x, int y);       // 绘制单个瓦片（坐标为Map的格子）
+    void draw(ImTextureID texture, int x, int y);       // 绘制单个瓦片（坐标为Map的格子），坐标系左上角的图块为原点(0,0)，场景的贴图应平移后再显示
 
     void SetPosition(int x, int y);                     // 设置Map位置
     void SetSize(int w, int h);                         // 设置Map大小

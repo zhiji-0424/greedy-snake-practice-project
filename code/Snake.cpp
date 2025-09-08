@@ -296,7 +296,8 @@ ImTextureID Snake::get_texture_id(int index) const
         node = node->next;
     }
     if (index==0) {
-        switch (head.direction) {
+        // 旧方向是他的稳定朝向，新方向随时会改变
+        switch (head.last_direction) {
             case SnakeDirection::up:
             return get_head_texture_id(0);
             break;
