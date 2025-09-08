@@ -105,3 +105,39 @@ void GamePage::draw()
 
     GetAppState()->page_manager->request_draw();
 }
+
+// 游戏初始化
+void GamePage::game_init()
+{
+
+}
+
+// 游戏重置
+void GamePage::game_reset()
+{
+    
+}
+
+// 游戏销毁清除
+void GamePage::game_destroy()
+{
+    
+}
+
+// 处理输入
+void GamePage::game_action()
+{
+    
+}
+
+// 逻辑更新
+void GamePage::game_update()
+{
+    
+}
+
+// 绘制
+void GamePage::game_draw()
+{
+    
+}
