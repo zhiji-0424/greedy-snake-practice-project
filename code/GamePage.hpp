@@ -5,6 +5,9 @@
 #include "PageManager.hpp"
 #include "AppState.hpp"
 #include "TileMap.hpp"
+#include "Snake.hpp"
+#include "Food.hpp"
+#include "Wall.hpp"
 
 class GamePage : public Page
 {
@@ -28,8 +31,13 @@ class GamePage : public Page
     void game_update();
     // 绘制
     void game_draw();
-    private:
+private:
     TileMap tile_map;
+    Snake snake;
+    Food food;
+    Wall wall;
+    int nw=5, nh=3;
+    Uint64 snake_time = 0;
 };
 
 #endif // GAMEPAGE_HPP_INCLUDED

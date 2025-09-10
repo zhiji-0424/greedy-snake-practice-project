@@ -1,10 +1,5 @@
 #include "GamePage.hpp"
-#include "Snake.hpp"
-#include "Food.hpp"
 
-Snake snake;
-Food food;
-int nw=18, nh=8;
 
 GamePage::GamePage()
 {
@@ -55,8 +50,6 @@ void GamePage::handle(const SDL_Event& event)
     }
 }
 
-Uint64 snake_time = 0;
-
 void GamePage::update()
 {
     int w, h;
@@ -87,9 +80,13 @@ void GamePage::draw()
     SDL_SetRenderDrawColorFloat(GetAppState()->renderer, 0.0f, 0.0f, 1.0f, 1.0f);
     SDL_RenderClear(GetAppState()->renderer);
 
-    for (int i=0; i<20; i++) {
-        for (int j=0; j<10; j++) {
-            tile_map.draw(0, i, j);
+    for (int i=0; i<nw+2; i++) {
+        for (int j=0; j<nh+2; j++) {
+            if (i>0 && i<nw+1 && j>0 && j<nh+1) {
+                tile_map.draw(wall.GetTextureID(0), i, j);
+            } else {
+                tile_map.draw(wall.GetTextureID(1), i, j);
+            }
         }   
     }
 

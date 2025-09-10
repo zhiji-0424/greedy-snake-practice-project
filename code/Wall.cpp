@@ -2,12 +2,30 @@
 
 Wall::Wall()
 {
-    stage_in_bg.load_image(GetAppState()->res_path + "ui/stage_in.png");
-    stage_out_bg.load_image(GetAppState()->res_path + "ui/stage_out.png");
+    image_loaded = false;
 }
 
 Wall::~Wall()
 {
+}
+
+ImTextureID Wall::GetTextureID(int i)
+{
+    if (!image_loaded) {
+        stage_in_bg.load_image(GetAppState()->res_path + "snake_appearance/wall_in.png");
+        stage_out_bg.load_image(GetAppState()->res_path + "snake_appearance/wall_out.png");
+        image_loaded = true;
+    }
+    switch (i) {
+    case 0:
+        return stage_in_bg.GetTextureID();
+        break;
+    case 1:
+        return stage_out_bg.GetTextureID();
+        break;
+    default:
+        return 0;
+    }
 }
 
 // void Wall::draw(const vec4& canvas, int nw, int nh)

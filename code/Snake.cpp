@@ -79,8 +79,9 @@ void Snake::kill()
     }
 }
 
-Snake::Snake()
+Snake::Snake() : length(1)
 {
+    // 初始长度应是1，若未初始化，长度为任意值
     reset();
 }
 
