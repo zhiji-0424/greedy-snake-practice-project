@@ -36,7 +36,7 @@ private:
     Snake snake;
     Food food;
     Wall wall;
-    int nw=5, nh=3;
+    int nw=10, nh=7;
     Uint64 snake_time = 0;
 };
 

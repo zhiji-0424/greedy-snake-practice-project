@@ -77,7 +77,7 @@ void GamePage::update()
 
 void GamePage::draw()
 {
-    SDL_SetRenderDrawColorFloat(GetAppState()->renderer, 0.0f, 0.0f, 1.0f, 1.0f);
+    SDL_SetRenderDrawColorFloat(GetAppState()->renderer, 0.0f, 0.0f, 0.0f, 1.0f);
     SDL_RenderClear(GetAppState()->renderer);
 
     for (int i=0; i<nw+2; i++) {
@@ -99,6 +99,9 @@ void GamePage::draw()
         y++;
         tile_map.draw(snake.get_texture_id(i), x, y);
     }
+
+    // 需要TileMap的方块部分的坐标，todo：导出接口
+    // ImGui::GetForegroundDrawList()->AddText(ImVec2(100, 100), IM_COL32_BLACK, "hello你好", 0);
 
     GetAppState()->page_manager->request_draw();
 }
