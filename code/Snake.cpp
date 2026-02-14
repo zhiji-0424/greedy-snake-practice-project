@@ -163,7 +163,7 @@ void Snake::delete_tail()
             t1 = t1->next;
         }
         t2->last_direction = t2->direction; // 更新尾部节点的前一个节点的方向(如果倒数第二节点是拐角)
-        free(t1);
+        delete t1;
         t2->next = NULL;
         length--;
     }
