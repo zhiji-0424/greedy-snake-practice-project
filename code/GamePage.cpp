@@ -77,7 +77,7 @@ void GamePage::update()
 
 void GamePage::draw()
 {
-    SDL_SetRenderDrawColorFloat(GetAppState()->renderer, 0.0f, 0.0f, 0.0f, 1.0f);
+    SDL_SetRenderDrawColorFloat(GetAppState()->renderer, 0.5f, 0.5f, 0.5f, 1.0f);
     SDL_RenderClear(GetAppState()->renderer);
 
     for (int i=0; i<nw+2; i++) {
@@ -101,7 +101,10 @@ void GamePage::draw()
     }
 
     // 需要TileMap的方块部分的坐标，todo：导出接口
-    // ImGui::GetForegroundDrawList()->AddText(ImVec2(100, 100), IM_COL32_BLACK, "hello你好", 0);
+    ImVec2 mousePos = ImGui::GetMousePos();
+    ImGui::PushFont(nullptr, 45);
+    ImGui::GetForegroundDrawList()->AddText(mousePos, IM_COL32_BLACK, "hello你好", 0);
+    ImGui::PopFont();
 
     GetAppState()->page_manager->request_draw();
 }

@@ -22,6 +22,10 @@ class TileMap
     void SetTileNum(int n_tile_x, int n_tile_y);        // 设置瓦片数量(横多少，竖多少)
     void SetExternalPadding(int padding_x, int padding_y);        // 设置Map外边距
 
+    int GetTileSize() {
+        return this->tile_size;
+    }
+
     private:
     int x, y;               // 左上角坐标
     int w, h;               // Map宽高限制
